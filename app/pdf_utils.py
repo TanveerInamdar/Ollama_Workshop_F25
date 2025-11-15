@@ -24,3 +24,26 @@ def extract_text(filename):
     except Exception as e:
         return f"Error reading PDF: {e}"
 
+
+def save_uploaded_file(uploaded_file):
+    """Save uploaded file to pdfs folder and return the filename"""
+    try:
+        file_path = PDF_FOLDER / uploaded_file.name
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        return uploaded_file.name
+    except Exception as e:
+        return None
+
+
+def extract_text_from_upload(uploaded_file):
+    """Extract text directly from uploaded file object"""
+    try:
+        reader = PdfReader(uploaded_file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+        return text.strip() or "No text found in PDF"
+    except Exception as e:
+        return f"Error reading PDF: {e}"
+
